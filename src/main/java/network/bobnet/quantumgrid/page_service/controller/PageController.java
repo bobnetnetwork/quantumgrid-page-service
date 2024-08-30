@@ -8,6 +8,7 @@ import network.bobnet.quantumgrid.commons.util.DtoUtil;
 import network.bobnet.quantumgrid.page_service.dto.PageDto;
 import network.bobnet.quantumgrid.page_service.dto.request.CreatePageRequest;
 import network.bobnet.quantumgrid.page_service.entity.Page;
+import network.bobnet.quantumgrid.page_service.entity.PageVersion;
 import network.bobnet.quantumgrid.page_service.service.PageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,5 +59,17 @@ public class PageController {
     public ResponseEntity<Void> deletePage(@PathVariable Long id) {
         pageService.deletePage(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{pageId}/versions")
+    public ResponseEntity<List<PageVersion>> getPageVersions(@PathVariable Long pageId) {
+        List<PageVersion> versions = pageService.getPageVersions(pageId);
+        return ResponseEntity.ok(versions);
+    }
+
+    @PostMapping("/{pageId}/revert")
+    public ResponseEntity<Page> revertToVersion(@PathVariable Long pageId, @RequestParam Integer versionNumber) {
+        Page revertedPage = pageService.revertToVersion(pageId, versionNumber);
+        return ResponseEntity.ok(revertedPage);
     }
 }

@@ -41,6 +41,9 @@ public class Page {
     @ToString.Include
     private PageStatus status;
 
+    @Column(name = "current_version_id")
+    private Long currentVersionId;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
